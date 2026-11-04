@@ -54,13 +54,14 @@ public class APLC_A2P2 {
 	//
 	public static ArrayList<Student> student_list = new ArrayList<Student>();
 
+	//mock data
 	public static void createStudentList() {
 		//dob is in yyyy/mm/dd
 		student_list.add(new Student("Benjamin", "Simms", LocalDate.of(2005, 12, 20), 'm', 3.75, 1, "Software Development", 5));
 
 		student_list.add(new Student("Wasim", "Borhot", LocalDate.of(2005, 12, 20), 'm', 3.75, 1, "Software Development", 5));
-		student_list.add(new Student("Michael", "Fortier", LocalDate.of(2004, 9, 20), 'm', 3.6, 1, "Software Development", 5));
-		student_list.add(new Student("Kiru", "Hankebo", LocalDate.of(2005, 12, 20), 'm', 3.75, 1, "Software Development", 5));
+		student_list.add(new Student("Michael", "Fortier", LocalDate.of(1993, 10, 5), 'm', 3.8, 1, "Software Development", 5));
+		student_list.add(new Student("Kiru", "Hankebo", LocalDate.of(2004, 10, 20), 'm', 3.75, 1, "Software Development", 5));
 		student_list.add(new Student("Andrew", "Dung Le", LocalDate.of(2005, 12, 20), 'm', 3.75, 1, "Software Development", 5));
 
 		student_list.add(new Student("Eunice", "Olugbemiro", LocalDate.of(2007, 1, 31), 'f', 3.9, 1, "Natural Science", 4));
@@ -110,7 +111,7 @@ public class APLC_A2P2 {
 			addStudent();
 			break;
 		case "9":
-			System.out.println("[!] Logging out, goodbye!");
+			System.out.println("\n[!] Logging out, goodbye!\n");
 			System.exit(0);
 			break;
 		default:
@@ -128,7 +129,7 @@ public class APLC_A2P2 {
 	public static void searchStudent(String user_input) {
 		System.out.print("Enter student first name: ");
 		String selected_f_name = getUserInput().toUpperCase();
-		System.out.print("Enter student first name: ");
+		System.out.print("Enter student last name: ");
 		String selected_l_name = getUserInput().toUpperCase();
 
 		boolean found_student = false;
@@ -159,7 +160,7 @@ public class APLC_A2P2 {
 			}
 			//if it cant find the student, then error
 			if (!found_student) {
-				System.err.println("ERR: Student \"" + selected_f_name + " " + selected_l_name + "\" does not exist! Returing to Admin View");
+				System.err.println("\nERR: Student \"" + selected_f_name + " " + selected_l_name + "\" does not exist! Returing to Admin View\n");
 				adminView();
 			}
 			//for finding a student
@@ -177,7 +178,7 @@ public class APLC_A2P2 {
 				}
 				else {
 					found_student = false;
-					System.err.println("ERR: Invalid input! Returning to Admin View.");
+					System.err.println("\nERR: Invalid input! Returning to Admin View.\n");
 					adminView();
 				}
 			}
@@ -188,7 +189,7 @@ public class APLC_A2P2 {
 				if (next_option.toUpperCase().equals("Y")) {
 					found_student = false;
 					student_list.remove(student_id);
-					
+
 					System.out.println("\n[!] Student removed! Returning to Admin View.\n");
 					adminView();
 				}
@@ -198,7 +199,7 @@ public class APLC_A2P2 {
 				}
 				else {
 					found_student = false;
-					System.err.println("ERR: Invalid input! Returning to Admin View.");
+					System.err.println("\nERR: Invalid input! Returning to Admin View.\n");
 					adminView();
 				}
 			}
@@ -214,6 +215,7 @@ public class APLC_A2P2 {
 			for (int i = 0; i < student_list.size(); i++) {
 				System.out.println("STUDENT: " + student_list.get(i).l_name + ", " + student_list.get(i).f_name);
 			}
+			System.out.println("=".repeat(30));
 			System.out.println("\n[!] All students shown. Returning to Admin View.\n");
 			adminView();
 		}
@@ -226,54 +228,69 @@ public class APLC_A2P2 {
 		System.out.print("Enter new student last name: ");
 		String new_l_name = getUserInput();
 		new_l_name = new_l_name.substring(0, 1).toUpperCase() + new_l_name.substring(1);
-		LocalDate new_dob = null;
-		
-		//facts
-		System.out.print("Enter new student birth year (yyyy): ");
-		String new_dob_year = getUserInput();
-		System.out.print("Enter new student birth month (mm): ");
-		String new_dob_month = getUserInput();
-		System.out.print("Enter new student birth day (dd): ");
-		String new_dob_day = getUserInput();
 
-		try {
-			new_dob = LocalDate.of(Integer.parseInt(new_dob_year), Integer.parseInt(new_dob_month), Integer.parseInt(new_dob_day));
-		} catch (DateTimeException e) {
-			System.err.println("ERR: Invalid date of birth. Returning to Admin View.");
+		boolean duplicate_student = false;
+
+		for (int i = 0; i < student_list.size(); i++) {
+			if (student_list.get(i).getFirstName().toUpperCase().equals(new_f_name.toUpperCase()) && student_list.get(i).getLastName().toUpperCase().equals(new_l_name.toUpperCase())) {
+				duplicate_student = true;
+			}
+		}
+		if (!duplicate_student) {
+			LocalDate new_dob = null;
+
+			//facts
+			System.out.print("Enter new student birth year (yyyy): ");
+			String new_dob_year = getUserInput();
+			System.out.print("Enter new student birth month (mm): ");
+			String new_dob_month = getUserInput();
+			System.out.print("Enter new student birth day (dd): ");
+			String new_dob_day = getUserInput();
+
+			try {
+				new_dob = LocalDate.of(Integer.parseInt(new_dob_year), Integer.parseInt(new_dob_month), Integer.parseInt(new_dob_day));
+			} catch (DateTimeException e) {
+				System.err.println("\nERR: Invalid date of birth. Returning to Admin View.\n");
+				adminView();
+			}
+			System.out.println("New student date of birth is: " + new_dob_year + "-" + new_dob_month + "-" + new_dob_day);
+
+			System.out.print("Enter new student sex: ");
+			String new_sex = getUserInput();
+
+			//school
+			System.out.print("Enter new student previous GPA: ");
+			String new_prev_gpa = getUserInput();
+			System.out.print("Enter new student current semester: ");
+			String new_cur_semester = getUserInput();
+			new_cur_semester = new_cur_semester.substring(0, 1).toUpperCase() + new_cur_semester.substring(1);
+
+			System.out.print("Enter new student program: ");
+			String new_program = getUserInput();
+			new_program = new_program.substring(0, 1).toUpperCase() + new_program.substring(1);
+
+			System.out.print("Enter new student course count: ");
+			String new_course_count = getUserInput();
+
+			Student new_student = new Student(new_f_name, new_l_name, new_dob, new_sex.charAt(0), Double.parseDouble(new_prev_gpa), Integer.parseInt(new_cur_semester), new_program, Integer.parseInt(new_course_count));
+
+			System.out.println("\nSTUDENT: " + new_student.l_name + ", " + new_student.f_name);
+			System.out.println("DOB: " + new_student.dob);
+			System.out.println("SEX: " + new_student.sex);
+			System.out.println("PREV GPA: " + new_student.prev_gpa);
+			System.out.println("SEMESTER: " + new_student.cur_semester);
+			System.out.println("PROGRAM: " + new_student.program);
+			System.out.println("COURSE COUNT: " + new_student.course_count);
+
+			student_list.add(new_student);
+
+			System.out.println("\n[!] New student added! Returning to Admin View.\n");
 			adminView();
 		}
-		System.out.println("New student date of birth is: " + new_dob_year + "-" + new_dob_month + "-" + new_dob_day);
-
-		System.out.print("Enter new student sex: ");
-		String new_sex = getUserInput();
-
-		//school
-		System.out.print("Enter new student previous GPA: ");
-		String new_prev_gpa = getUserInput();
-		System.out.print("Enter new student current semester: ");
-		String new_cur_semester = getUserInput();
-		new_cur_semester = new_cur_semester.substring(0, 1).toUpperCase() + new_cur_semester.substring(1);
-
-		System.out.print("Enter new student program: ");
-		String new_program = getUserInput();
-		new_program = new_program.substring(0, 1).toUpperCase() + new_program.substring(1);
-
-		System.out.print("Enter new student course count: ");
-		String new_course_count = getUserInput();
-
-		Student new_student = new Student(new_f_name, new_l_name, new_dob, new_sex.charAt(0), Double.parseDouble(new_prev_gpa), Integer.parseInt(new_cur_semester), new_program, Integer.parseInt(new_course_count));
-
-		System.out.println("\nSTUDENT: " + new_student.l_name + ", " + new_student.f_name);
-		System.out.println("DOB: " + new_student.dob);
-		System.out.println("SEX: " + new_student.sex);
-		System.out.println("PREV GPA: " + new_student.prev_gpa);
-		System.out.println("SEMESTER: " + new_student.cur_semester);
-		System.out.println("PROGRAM: " + new_student.program);
-		System.out.println("COURSE COUNT: " + new_student.course_count);
-
-
-		System.out.println("\n[!] New student added! Returning to Admin View.\n");
-		adminView();
+		else {
+			System.err.println("\nERR: " + new_f_name + " " + new_l_name +" already exists! Returning to Admin View.\n");
+			adminView();
+		}
 	}
 
 	//TODO
